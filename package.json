@@ -4,8 +4,11 @@
   "description": "",
   "main": "run.ts",
   "scripts": {
-    "speedtest": "ts-node run.ts",
+    "prod": "ts-node run.ts",
     "dev": "ts-node-dev --respawn run.ts"
+  },
+  "bin": {
+    "speedtest": "run.ts"
   },
   "author": "",
   "license": "ISC",

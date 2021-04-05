@@ -1,4 +1,6 @@
-import { SpeedTest } from './src/SpeedTest/SpeedTest'
+#!/usr/bin/env ts-node
 
-const speedtest = new SpeedTest()
-speedtest.run()
+import { SpeedTest } from "./src/SpeedTest/SpeedTest";
+
+const speedtest = new SpeedTest();
+speedtest.run();
