@@ -1,6 +1,4 @@
-#!/usr/bin/env ts-node
-
-import { SpeedTest } from "./src/SpeedTest/SpeedTest";
+import { SpeedTest } from "./src/speedtest/SpeedTest";
 
 const speedtest = new SpeedTest();
 speedtest.run();
