@@ -23,11 +23,11 @@ class SpeedTest {
     return createLogger({
       transports: [
         new transports.File({
-          filename: path.resolve(__dirname, "../../logs/results.log"),
+          filename: path.resolve(__dirname, "./logs/results.log"),
           level: "debug",
         }),
         new transports.File({
-          filename: path.resolve(__dirname, "../../logs/errors.log"),
+          filename: path.resolve(__dirname, "./logs/errors.log"),
           level: "error",
         }),
       ],
