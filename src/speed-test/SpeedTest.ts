@@ -3,7 +3,7 @@ import { createLogger, Logger, transports } from "winston";
 import axios, { AxiosResponse } from "axios";
 import { Commander } from "../lib/commander/Commander";
 
-export class SpeedTest {
+class SpeedTest {
   private static readonly binaryName = "speedtest";
   private static readonly unitFlag = "-u";
   private static readonly unitFormat = "Mbps";
@@ -83,7 +83,9 @@ export class SpeedTest {
   }
 }
 
-export type SpeedTestResult = {
+export default SpeedTest;
+
+type SpeedTestResult = {
   timestamp: string;
   ping: {
     jitter: number;

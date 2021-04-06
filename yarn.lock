@@ -348,9 +348,9 @@ axios@^0.21.1:
     follow-redirects "^1.10.0"
 
 balanced-match@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
-  integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.1.tgz#4f46cf3183a02a6a25875cf9a4240c15291cf464"
+  integrity sha512-qyTw2VPYRg31SlVU5WDdvCSyMTJ3YSP4Kz2CidWZFPFawCiHJdCyKyZeXIGMJ5ebMQYXEI56kDR8tcnDkbZstg==
 
 big.js@^5.2.2:
   version "5.2.2"
