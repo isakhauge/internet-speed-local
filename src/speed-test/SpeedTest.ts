@@ -25,7 +25,7 @@ class SpeedTest {
 			transports: [
 				new transports.File({
 					filename: path.resolve(__dirname, './logs/speedtests.log'),
-					level: 'success',
+					level: 'info',
 				}),
 				new transports.File({
 					filename: path.resolve(__dirname, './logs/errors.log'),
@@ -43,7 +43,7 @@ class SpeedTest {
 
 			this.storeSpeedTestResultDeferred(result)
 
-			this.logger.log('success', {
+			this.logger.info({
 				timestamp: new Date().toISOString(),
 				down: SpeedTest.toMbpsString(result.download.bandwidth),
 				up: SpeedTest.toMbpsString(result.upload.bandwidth),
@@ -55,7 +55,7 @@ class SpeedTest {
 				type: 'error',
 				timestamp: new Date().toISOString(),
 				message: 'An error occured while running the speedtest command',
-				reason: e.message ?? undefined,
+				reason: e + '' ?? undefined,
 			})
 			throw new Error()
 		}
