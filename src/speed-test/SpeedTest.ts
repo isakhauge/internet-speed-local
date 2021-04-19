@@ -45,9 +45,6 @@ class SpeedTest {
 			result = JSON.parse(rawStr) as SpeedTestResult
 			speedTest = await this.storeSpeedTestResult(result)
 
-			console.log('SpeedTest result', result)
-			console.log('API response', speedTest)
-
 			this.logger.log('info', {
 				timestamp: new Date().toISOString(),
 				down: SpeedTest.toMbpsString(result.download.bandwidth),
