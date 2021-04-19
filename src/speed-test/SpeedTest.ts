@@ -40,6 +40,7 @@ class SpeedTest {
 		const arg = SpeedTest.composeArgument()
 		let rawStr: string
 		let result: SpeedTestResult
+		let axiosResponse: AxiosResponse
 
 		try {
 			rawStr = await Commander.exec(arg)
@@ -66,7 +67,7 @@ class SpeedTest {
 		}
 
 		try {
-			await this.storeSpeedTestResult(result)
+			axiosResponse = await this.storeSpeedTestResult(result)
 		} catch (e) {
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
@@ -81,6 +82,7 @@ class SpeedTest {
 			timestamp: new Date().toISOString(),
 			down: SpeedTest.toMbpsString(result.download.bandwidth),
 			up: SpeedTest.toMbpsString(result.upload.bandwidth),
+			axios: axiosResponse,
 		})
 		return
 	}
@@ -95,12 +97,12 @@ class SpeedTest {
 		].join(' ')
 	}
 
-	private storeSpeedTestResult(data: SpeedTestResult) {
+	private storeSpeedTestResult(data: SpeedTestResult): Promise<AxiosResponse> {
 		return new Promise((resolve, reject) => {
 			axios
 				.post(SpeedTest.storeUrl, data)
 				.then((response: AxiosResponse) => {
-					resolve(response.data)
+					resolve(response)
 				})
 				.catch((reason: any) => {
 					reject(reason)
