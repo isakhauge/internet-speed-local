@@ -46,7 +46,8 @@ class SpeedTest {
 		} catch (e) {
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
-				message: 'Error occured when running the speedtest command',
+				stage: 'Executing speedtest CLI command',
+				message: e + '',
 				reason: e,
 			})
 			return
@@ -57,7 +58,8 @@ class SpeedTest {
 		} catch (e) {
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
-				message: 'Error occured when parsing the raw string to JSON',
+				stage: 'Parsing test result to JSON',
+				message: e + '',
 				reason: e,
 			})
 			return
@@ -68,7 +70,8 @@ class SpeedTest {
 		} catch (e) {
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
-				message: 'An error occured when sending the request to API',
+				stage: 'Sending test result to API',
+				message: e + '',
 				reason: e,
 			})
 			return

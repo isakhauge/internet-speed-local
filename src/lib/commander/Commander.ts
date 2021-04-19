@@ -6,16 +6,16 @@ export class Commander {
 			exec(
 				arg,
 				(error: ExecException | null, stdout: string, stderr: string): void => {
+					if (stdout) {
+						resolve(stdout)
+						return
+					}
 					if (stderr) {
 						reject(stderr)
 						return
 					}
 					if (error) {
 						reject(error + '')
-						return
-					}
-					if (stdout) {
-						resolve(stdout)
 						return
 					}
 				}
