@@ -1,27 +1,27 @@
 {
-  "name": "internet-speed-local",
-  "version": "1.0.0",
-  "private": "true",
-  "scripts": {
-    "start": "ts-node run.ts",
-    "dev": "ts-node-dev --respawn run.ts",
-    "build": "webpack build -c ./webpack.config.js"
-  },
-  "author": "Isak K. Hauge",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^0.21.1",
-    "ts-node": "^9.1.1",
-    "ts-node-dev": "^1.1.6",
-    "winston": "^3.3.3"
-  },
-  "devDependencies": {
-    "@types/node": "^14.14.34",
-    "@types/winston": "^2.4.4",
-    "clean-webpack-plugin": "^3.0.0",
-    "ts-loader": "^8.1.0",
-    "typescript": "^4.2.3",
-    "webpack": "^5.30.0",
-    "webpack-cli": "^4.6.0"
-  }
+	"name": "internet-speed-local",
+	"version": "1.0.0",
+	"private": "true",
+	"scripts": {
+		"start": "ts-node ./src/run.ts",
+		"dev": "ts-node-dev --respawn ./src/run.ts",
+		"build": "webpack build -c ./webpack.config.js"
+	},
+	"author": "Isak K. Hauge",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^0.21.1",
+		"ts-node": "^9.1.1",
+		"ts-node-dev": "^1.1.6",
+		"winston": "^3.3.3"
+	},
+	"devDependencies": {
+		"@types/axios": "^0.14.0",
+		"@types/node": "^14.14.41",
+		"clean-webpack-plugin": "^4.0.0-alpha.0",
+		"ts-loader": "^9.0.0",
+		"typescript": "^4.2.4",
+		"webpack": "^5.34.0",
+		"webpack-cli": "^4.6.0"
+	}
 }
