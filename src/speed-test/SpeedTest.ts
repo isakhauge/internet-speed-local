@@ -38,25 +38,48 @@ class SpeedTest {
 
 	public async run(): Promise<void> {
 		const arg = SpeedTest.composeArgument()
-		const rawStr: string = await Commander.exec(arg)
+		let rawStr: string
 		let result: SpeedTestResult
-		let speedTest: unknown
-		try {
-			result = JSON.parse(rawStr) as SpeedTestResult
-			speedTest = await this.storeSpeedTestResult(result)
 
-			this.logger.log('info', {
-				timestamp: new Date().toISOString(),
-				down: SpeedTest.toMbpsString(result.download.bandwidth),
-				up: SpeedTest.toMbpsString(result.upload.bandwidth),
-			})
+		try {
+			rawStr = await Commander.exec(arg)
 		} catch (e) {
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
-				message: 'An error occured while running the speedtest command',
-				reason: e + '' ?? undefined,
+				message: 'Error occured when running the speedtest command',
+				reason: e,
 			})
+			return
 		}
+
+		try {
+			result = JSON.parse(rawStr) as SpeedTestResult
+		} catch (e) {
+			this.logger.log('error', {
+				timestamp: new Date().toISOString(),
+				message: 'Error occured when parsing the raw string to JSON',
+				reason: e,
+			})
+			return
+		}
+
+		try {
+			await this.storeSpeedTestResult(result)
+		} catch (e) {
+			this.logger.log('error', {
+				timestamp: new Date().toISOString(),
+				message: 'An error occured when sending the request to API',
+				reason: e,
+			})
+			return
+		}
+
+		this.logger.log('info', {
+			timestamp: new Date().toISOString(),
+			down: SpeedTest.toMbpsString(result.download.bandwidth),
+			up: SpeedTest.toMbpsString(result.upload.bandwidth),
+		})
+		return
 	}
 
 	private static composeArgument(): string {
