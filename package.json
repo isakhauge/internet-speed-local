@@ -3,8 +3,8 @@
 	"version": "1.0.0",
 	"private": "true",
 	"scripts": {
-		"start": "ts-node ./src/run.ts",
-		"dev": "ts-node-dev --respawn ./src/run.ts",
+		"start": "ts-node ./src/Run.ts",
+		"dev": "ts-node-dev --respawn ./src/Run.ts",
 		"build": "webpack build -c ./webpack.config.js"
 	},
 	"author": "Isak K. Hauge",

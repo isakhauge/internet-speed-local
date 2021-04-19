@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 module.exports = {
 	target: 'node',
 	mode: 'production',
-	entry: './src/run.ts',
+	entry: './src/Run.ts',
 	output: {
 		path: relPath('dist'),
 		filename: 'speedtest.js',
