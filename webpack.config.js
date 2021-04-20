@@ -1,6 +1,7 @@
 const path = require('path')
 const relPath = (relativePath) => path.resolve(__dirname, relativePath)
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
 module.exports = {
 	target: 'node',
@@ -26,7 +27,7 @@ module.exports = {
 			},
 		],
 	},
-	plugins: [new CleanWebpackPlugin()],
+	plugins: [new CleanWebpackPlugin(), new Dotenv()],
 	resolve: {
 		extensions: ['.ts', '.js'],
 		preferRelative: true,

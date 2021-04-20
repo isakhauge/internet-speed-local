@@ -10,10 +10,10 @@
 	"author": "Isak K. Hauge",
 	"license": "ISC",
 	"dependencies": {
-		"axios": "^0.21.1",
+		"dotenv": "^8.2.0",
+		"dotenv-webpack": "^7.0.2",
 		"ts-node": "^9.1.1",
 		"ts-node-dev": "^1.1.6",
-		"dotenv": "^8.2.0",
 		"winston": "^3.3.3"
 	},
 	"devDependencies": {

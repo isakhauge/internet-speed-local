@@ -1,9 +1,10 @@
 import path from 'path'
 import { createLogger, Logger, transports, config } from 'winston'
-import axios, { AxiosResponse } from 'axios'
 import { Commander } from '../lib/commander/Commander'
 import { SpeedTestResult } from '../lib/ookla-speedtest/SpeedTest'
 import dotenv from 'dotenv'
+import { cout } from '../lib/cout/Cout'
+import { HttpsWrapper } from '../lib/https-wrapper/HttpsWrapper'
 dotenv.config()
 
 const {
@@ -46,11 +47,13 @@ class SpeedTest {
 		const arg = SpeedTest.composeArgument()
 		let rawStr: string
 		let result: SpeedTestResult
-		let axiosResponse: AxiosResponse
+		let axiosResponse: Buffer
 
 		try {
 			rawStr = await Commander.exec(arg)
+			cout('Raw', rawStr)
 		} catch (e) {
+			cout('CLI', e)
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
 				context: 'Executing speedtest CLI command',
@@ -62,7 +65,9 @@ class SpeedTest {
 
 		try {
 			result = JSON.parse(rawStr) as SpeedTestResult
+			cout('Parsed JSON!')
 		} catch (e) {
+			cout('JSON parsing', e)
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
 				context: 'Parsing test result to JSON',
@@ -74,7 +79,9 @@ class SpeedTest {
 
 		try {
 			axiosResponse = await this.storeSpeedTestResult(result)
+			cout('Axios Response', axiosResponse.toString())
 		} catch (e) {
+			console.error(e)
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
 				context: 'Sending test result to API',
@@ -103,11 +110,10 @@ class SpeedTest {
 		].join(' ')
 	}
 
-	private storeSpeedTestResult(data: SpeedTestResult): Promise<AxiosResponse> {
+	private storeSpeedTestResult(data: SpeedTestResult): Promise<Buffer> {
 		return new Promise((resolve, reject) => {
-			axios
-				.post(SpeedTest.storeUrl, data)
-				.then((response: AxiosResponse) => {
+			HttpsWrapper.post(SpeedTest.storeUrl, data)
+				.then((response: any) => {
 					resolve(response)
 				})
 				.catch((reason: any) => {
