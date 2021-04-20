@@ -3,16 +3,22 @@ import { createLogger, Logger, transports, config } from 'winston'
 import axios, { AxiosResponse } from 'axios'
 import { Commander } from '../lib/commander/Commander'
 import { SpeedTestResult } from '../lib/ookla-speedtest/SpeedTest'
+import dotenv from 'dotenv'
+dotenv.config()
+
+const {
+	STORE_URL,
+	SPEEDTEST_CLI_UNIT_FORMAT,
+	SPEEDTEST_CLI_OUTPUT_FORMAT,
+} = process.env
 
 class SpeedTest {
 	private static readonly binaryName = 'speedtest'
 	private static readonly unitFlag = '-u'
-	private static readonly unitFormat = 'Mbps'
+	private static readonly unitFormat = SPEEDTEST_CLI_UNIT_FORMAT
 	private static readonly outputFormatFlag = '-f'
-	private static readonly outputFormat = 'json-pretty'
-
-	private static readonly storeUrl =
-		'https://internet-speed-isakhauge.herokuapp.com/api/speedtest'
+	private static readonly outputFormat = SPEEDTEST_CLI_OUTPUT_FORMAT
+	private static readonly storeUrl = STORE_URL ?? ''
 
 	private logger: Logger
 
@@ -47,7 +53,7 @@ class SpeedTest {
 		} catch (e) {
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
-				stage: 'Executing speedtest CLI command',
+				context: 'Executing speedtest CLI command',
 				message: e + '',
 				reason: e,
 			})
@@ -59,7 +65,7 @@ class SpeedTest {
 		} catch (e) {
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
-				stage: 'Parsing test result to JSON',
+				context: 'Parsing test result to JSON',
 				message: e + '',
 				reason: e,
 			})
@@ -71,7 +77,7 @@ class SpeedTest {
 		} catch (e) {
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
-				stage: 'Sending test result to API',
+				context: 'Sending test result to API',
 				message: e + '',
 				reason: e,
 			})
