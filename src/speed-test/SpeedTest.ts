@@ -5,6 +5,7 @@ import { SpeedTestResult } from '../lib/ookla-speedtest/SpeedTest'
 import dotenv from 'dotenv'
 import { cout } from '../lib/cout/Cout'
 import { HttpsWrapper } from '../lib/https-wrapper/HttpsWrapper'
+
 dotenv.config()
 
 const {
@@ -68,7 +69,8 @@ class SpeedTest {
 			response = await this.storeSpeedTestResult(rawStr)
 			cout('HTTP POST Response:', response)
 		} catch (e) {
-			cout('HTTP POST Request failed:')
+			console.error(e)
+			cout('HTTP POST Request failed:', e)
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
 				context: 'Sending test result to API',
