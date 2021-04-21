@@ -8,6 +8,7 @@ import { HttpsWrapper } from '../lib/https-wrapper/HttpsWrapper'
 
 dotenv.config()
 
+const relPath = (arg: string) => path.resolve(__dirname, arg)
 const {
 	STORE_URL,
 	SPEEDTEST_CLI_UNIT_FORMAT,
@@ -33,12 +34,16 @@ class SpeedTest {
 			levels: config.syslog.levels,
 			transports: [
 				new transports.File({
-					filename: path.resolve(__dirname, './logs/speedtests.log'),
+					filename: relPath('./logs/speedtests.log'),
 					level: 'info',
 				}),
 				new transports.File({
-					filename: path.resolve(__dirname, './logs/errors.log'),
+					filename: relPath('./logs/errors.log'),
 					level: 'error',
+				}),
+				new transports.File({
+					filename: relPath('./logs/debug.log'),
+					level: 'debug',
 				}),
 			],
 		})
@@ -49,6 +54,14 @@ class SpeedTest {
 		let rawStr: string
 		let result: SpeedTestResult
 		let response: string
+
+		this.logger.log('debug', {
+			timestamp: new Date().toISOString(),
+			context: 'Check ENVs',
+			STORE_URL,
+			SPEEDTEST_CLI_UNIT_FORMAT,
+			SPEEDTEST_CLI_OUTPUT_FORMAT,
+		})
 
 		try {
 			cout('Running the SpeedTest CLI ...')
@@ -117,6 +130,12 @@ class SpeedTest {
 	}
 
 	private async storeSpeedTestResult(data: string): Promise<string> {
+		this.logger.log('debug', {
+			timestamp: new Date().toISOString(),
+			context: 'Sending data to API',
+			url: SpeedTest.storeUrl,
+			data: data,
+		})
 		return await HttpsWrapper.post(SpeedTest.storeUrl, data)
 	}
 
