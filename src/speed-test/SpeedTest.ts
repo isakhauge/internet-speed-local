@@ -47,7 +47,7 @@ class SpeedTest {
 		const arg = SpeedTest.composeArgument()
 		let rawStr: string
 		let result: SpeedTestResult
-		let axiosResponse: Buffer
+		let response: string
 
 		try {
 			rawStr = await Commander.exec(arg)
@@ -57,6 +57,20 @@ class SpeedTest {
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
 				context: 'Executing speedtest CLI command',
+				message: e + '',
+				reason: e,
+			})
+			return
+		}
+
+		try {
+			response = await this.storeSpeedTestResult(rawStr)
+			cout('Axios Response', response)
+		} catch (e) {
+			console.error(e)
+			this.logger.log('error', {
+				timestamp: new Date().toISOString(),
+				context: 'Sending test result to API',
 				message: e + '',
 				reason: e,
 			})
@@ -77,25 +91,11 @@ class SpeedTest {
 			return
 		}
 
-		try {
-			axiosResponse = await this.storeSpeedTestResult(result)
-			cout('Axios Response', axiosResponse.toString())
-		} catch (e) {
-			console.error(e)
-			this.logger.log('error', {
-				timestamp: new Date().toISOString(),
-				context: 'Sending test result to API',
-				message: e + '',
-				reason: e,
-			})
-			return
-		}
-
 		this.logger.log('info', {
 			timestamp: new Date().toISOString(),
 			down: SpeedTest.toMbpsString(result.download.bandwidth),
 			up: SpeedTest.toMbpsString(result.upload.bandwidth),
-			axios: axiosResponse,
+			response: response,
 		})
 		return
 	}
@@ -110,16 +110,8 @@ class SpeedTest {
 		].join(' ')
 	}
 
-	private storeSpeedTestResult(data: SpeedTestResult): Promise<Buffer> {
-		return new Promise((resolve, reject) => {
-			HttpsWrapper.post(SpeedTest.storeUrl, data)
-				.then((response: any) => {
-					resolve(response)
-				})
-				.catch((reason: any) => {
-					reject(reason)
-				})
-		})
+	private async storeSpeedTestResult(data: string): Promise<string> {
+		return await HttpsWrapper.post(SpeedTest.storeUrl, data)
 	}
 
 	private static toMbpsString(arg: number): string {

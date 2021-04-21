@@ -6,30 +6,46 @@ import {
 } from 'http'
 import { request as httpsReq } from 'https'
 
-export class HttpsWrapper {
-	public static post(url: string, data: object): Promise<Buffer> {
-		const stringifiedData = JSON.stringify(data)
-		const isHttps = /^https:/.test(url)
-		return new Promise((resolve, reject) => {
-			const options = {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Content-Length': stringifiedData.length,
-				},
-			} as RequestOptions
+type RequestCallback = (res: IncomingMessage) => void
 
-			const callback = (res: IncomingMessage) => {
-				res.on('data', resolve)
-				res.on('error', reject)
-			}
-			const req = (() => {
-				return isHttps
-					? httpsReq(url, options, callback)
-					: httpReq(url, options, callback)
-			})() as ClientRequest
-			req.write(stringifiedData)
-			req.end()
+export class HttpsWrapper {
+	public static post(url: string, data: string): Promise<string> {
+		const options = HttpsWrapper.createRequestOptions(data.length)
+		return new Promise((resolve, reject) => {
+			const request = HttpsWrapper.createRequest(
+				url,
+				options,
+				(res: IncomingMessage) => {
+					res.on('data', (chunk: Buffer) => {
+						resolve(chunk.toString())
+					})
+					res.on('error', reject)
+				}
+			)
+			request.write(data)
+			request.end()
 		})
+	}
+
+	public static createRequestOptions(dataLength: number): RequestOptions {
+		return {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Content-Length': dataLength,
+			},
+		}
+	}
+
+	public static createRequest(
+		url: string,
+		options: RequestOptions,
+		callback: RequestCallback
+	): ClientRequest {
+		const isHttps = /^https:/.test(url)
+		if (isHttps) {
+			return httpsReq(url, options, callback)
+		}
+		return httpReq(url, options, callback)
 	}
 }
