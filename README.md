@@ -30,3 +30,7 @@ yarn install
 ```bash
 yarn build
 ```
+### Run the logger 🚀
+```bash
+node dist/speedtest.js
+```
