@@ -50,10 +50,11 @@ class SpeedTest {
 		let response: string
 
 		try {
+			cout('Running the SpeedTest CLI ...')
 			rawStr = await Commander.exec(arg)
-			cout('Raw', rawStr)
+			cout('Raw string output from SpeedTest CLI:', rawStr)
 		} catch (e) {
-			cout('CLI', e)
+			cout('SpeedTest CLI failed:', e)
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
 				context: 'Executing speedtest CLI command',
@@ -65,9 +66,9 @@ class SpeedTest {
 
 		try {
 			response = await this.storeSpeedTestResult(rawStr)
-			cout('Axios Response', response)
+			cout('HTTP POST Response:', response)
 		} catch (e) {
-			console.error(e)
+			cout('HTTP POST Request failed:')
 			this.logger.log('error', {
 				timestamp: new Date().toISOString(),
 				context: 'Sending test result to API',
@@ -79,7 +80,10 @@ class SpeedTest {
 
 		try {
 			result = JSON.parse(rawStr) as SpeedTestResult
-			cout('Parsed JSON!')
+			cout('Parsed string to JSON successfully!', {
+				down: SpeedTest.toMbpsString(result.download.bandwidth),
+				up: SpeedTest.toMbpsString(result.upload.bandwidth),
+			})
 		} catch (e) {
 			cout('JSON parsing', e)
 			this.logger.log('error', {
